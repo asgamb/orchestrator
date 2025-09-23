@@ -4,14 +4,15 @@ It includes:
 - a config file (config.conf)
 - the main functional module (orchestratorAPI.py)
 
-# Create a venv
+# Create venv
 ```
 python -m venv venv
 ```
 
-# Activate the venv
+# Activate venv and install requirements (python3.8)
 ```
 venv/SCrits/activate
+pip install -r requirements.txt
 ```
 
 # Run the orchestrator
