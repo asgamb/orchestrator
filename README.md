@@ -11,7 +11,7 @@ python -m venv venv
 
 # Activate venv and install requirements (python3.8)
 ```
-venv/SCrits/activate
+venv/Scripts/activate
 pip install -r requirements.txt
 ```
 
