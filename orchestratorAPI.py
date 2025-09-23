@@ -100,7 +100,7 @@ if __name__ == '__main__':
     ip2 = 10.5.1.132
     """
     if 'ipowdm' in config:
-        if config['ipowdm']['enabled']:
+        if config['ipowdm']['enabled'] == "1":
             ip_en = 1
             ip1 = config['ipowdm']['ip1']
             ip2 = config['ipowdm']['ip2']
@@ -114,7 +114,7 @@ if __name__ == '__main__':
     ponPort = 9092
     """
     if 'pon' in config:
-        if config['pon']['enabled']:
+        if config['pon']['enabled'] == "1":
             pon_en = 1
             pon_ip = config['pon']['ponIP']
             pon_port = config['pon']['ponPort']
@@ -127,7 +127,7 @@ if __name__ == '__main__':
     matrixPort = 8888
     """
     if 'matrix' in config:
-        if config['matrix']['enabled']:
+        if config['matrix']['enabled'] == "1":
             matrix_en = 1
             m_ip = config['matrix']['matrixIP']
             m_port = config['matrix']['matrixPort']
@@ -142,7 +142,7 @@ if __name__ == '__main__':
     ipm_pswd = "infinera11"
     """
     if 'ipm' in config:
-        if config['ipm']['enabled']:
+        if config['ipm']['enabled'] == "1":
             ipm_en_en = 1
             ipm_ip = config['ipm']['ipm_IP']
             ipm_port = config['ipm']['ipm_Port']

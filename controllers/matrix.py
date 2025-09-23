@@ -27,7 +27,7 @@ class TapiMatrix:
         self.headers = {"Accept": "application/json, text/plain, */*", "Content-Type": "application/json"}
         self.test = test
         if self.test:
-            print("Matrix testing enabled")
+            print("TAPI matrix testing enabled")
 
 
     def create_connectivity_service(self, payload: dict):
