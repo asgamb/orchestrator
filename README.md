@@ -1,14 +1,20 @@
-#This software is developed by Andrea Sgambelluri to provide a basic skeleton for the orchestration of different domais.
+# This software is developed by Andrea Sgambelluri to provide a basic skeleton for the orchestration of different domais.
 It includes:
--a folder (controllers) where the client for the different controllers is included
--a config file (config.conf)
--the main functional module (orchestratorAPI.py)
+- a folder (controllers) where the client for the different controllers is included
+- a config file (config.conf)
+- the main functional module (orchestratorAPI.py)
 
-#create a venv
+# Create a venv
+```
 python -m venv venv
+```
 
-#activate the venv
+# Activate the venv
+```
 venv/SCrits/activate
+```
 
-#run the orchestrator
+# Run the orchestrator
+```
 python orchestratorAPI.py
+```
