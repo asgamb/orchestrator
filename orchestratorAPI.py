@@ -8,8 +8,6 @@ from controllers.pon import PON
 import time
 
 
-
-
 portx = 4000
 
 # Flask and Flask-RestPlus configuration
@@ -21,31 +19,26 @@ orch = api.namespace('Orchestrator', description='Orch APIs')
 config = configparser.ConfigParser()
 
 #Edgecore1 ports
-if_HUB1 = "Ethernet0"
-if_HUB2 = "Ethernet0"
-if_SERVER = "Ethernet8"
-if_XG1 = "Ethernet256"
-if_XG2 = "Ethernet257"
+if_ADVA = "Ethernet40"
+if_HUB1 = "Ethernet64"
+if_HUB2 = "Ethernet66"
+if_RTH = "Ethernet216"
+if_SERVER = "Ethernet256"
 
 #Edgecore2 ports
 if_L1 = "Ethernet0"
-if_L2 = "Ethernet8"
-if_PC1 = "Ethernet256"
-if_PC2 = "Ethernet257"
+if_L2 = "Ethernet32"
+if_RTL = "Ethernet200"
 
 #matrix ports
-if_OLT1 = "port1"
-if_OLT2 = "port2"
-if_B1 = "port3"
-if_B2 = "port4"
-if_H1 = "port5"
-if_H2 = "port6"
-if_XR1 = "port7"
-if_XR2 = "port8"
-if_PON1 = "port9"
-if_PON2 = "port10"
-if_M1 = "port11"
-if_M2 = "port12"
+if_CEX1 = "32out"
+if_CEX2 = "27out"
+if_OLT1 = "25in"
+if_OLT2 = "33in"
+if_B1 = "26out"
+if_B2 = "34out"
+if_M1 = "30in"
+if_M2 = "28in"
 
 
 ip_client = None
@@ -62,7 +55,7 @@ def provisioning1():
     print("provisioning first step")
     if matrix_en:
         print("Matrix setup")
-        print("connections H1-XR1 and M1-B1")
+        print("connection M1-B1")
         message = {
             "tapi-connectivity:connectivity-service": [
                 {
@@ -107,17 +100,24 @@ def provisioning1():
         ip_client.set_vlan(1, 1001)
         print("Edgecore1 HUB: adding interfaces to vlan 1001")
         ip_client.set_vlan_member_single(1, 1, if_HUB1, 1001, 0) #XR
-        ip_client.set_vlan_member_single(1, 1, if_SERVER, 1001, 0) #client
+        ip_client.set_vlan_member_single(1, 1, if_RTH, 1001, 0) #client
         print("Edgecore2 leaves: adding interfaces to vlan 1001")
         ip_client.set_vlan_member_single(1, 2, if_L1, 1001, 0) #XR
-        ip_client.set_vlan_member_single(1, 2, if_PC1, 1001, 1) #client
+        ip_client.set_vlan_member_single(1, 2, if_RTL, 1001, 0) #client
+
+
+
+def deleter():
+    if pon_en:
+        print("PON delete")
+        pon_client.set_pon(0, 2)
 
 
 def provisioning2():
     print("provisioning second step")
     if matrix_en:
         print("Matrix setup")
-        print("connections OLT1-PON1")
+        print("connection OLT1-CEX1")
         message = {
             "tapi-connectivity:connectivity-service": [
                 {
@@ -157,8 +157,8 @@ def provisioning2():
         print("IPoWDM setup")
         print("creating vlan 333 in the HUB edgecore")
         ip_client.set_vlan_single(1, 1, 333)
-        print("Edgecore1 HUB: adding interfaces to vlan 1001")
-        ip_client.set_vlan_member_single(1, 1, if_XG1, 333, 0) #XG interface OLT1
+        print("Edgecore1 HUB: adding interfaces to vlan 333")
+        ip_client.set_vlan_member_single(1, 1, if_ADVA, 333, 0) #XG interface OLT1
         ip_client.set_vlan_member_single(1, 1, if_SERVER, 333, 0) #server
 
 
@@ -166,7 +166,7 @@ def provisioning3():
     print("provisioning third step")
     if matrix_en:
         print("Matrix setup")
-        print("connections H2-XR2 and M2-B2")
+        print("connection M2-B2")
         message = {
             "tapi-connectivity:connectivity-service": [
                 {
@@ -213,17 +213,17 @@ def provisioning3():
         ip_client.set_vlan(1, 1002)
         print("Edgecore1 HUB: adding interfaces to vlan 1001")
         ip_client.set_vlan_member_single(1, 1, if_HUB2, 1002, 0) #XR
-        ip_client.set_vlan_member_single(1, 1, if_SERVER, 1002, 0) #client
+        ip_client.set_vlan_member_single(1, 1, if_RTH, 1002, 0) #client
         print("Edgecore2 leaves: adding interfaces to vlan 1001")
         ip_client.set_vlan_member_single(1, 2, if_L2, 1002, 0) #XR
-        ip_client.set_vlan_member_single(1, 2, if_PC2, 1002, 1) #client
+        ip_client.set_vlan_member_single(1, 2, if_RTL, 1002, 0) #client
 
 
 def provisioning4():
     print("provisioning fourth step")
     if matrix_en:
         print("Matrix setup")
-        print("connections OLT2-PON2")
+        print("connections OLT2-CEX2")
         message = {
             "tapi-connectivity:connectivity-service": [
                 {
@@ -263,11 +263,9 @@ def provisioning4():
         print("IPoWDM setup")
         print("creating vlan 222 in the HUB edgecore")
         ip_client.set_vlan_single(1, 1, 222)
-        print("Edgecore1 HUB: adding interfaces to vlan 1001")
-        ip_client.set_vlan_member_single(1, 1, if_XG2, 222, 0) #XG interface OLT1
+        print("Edgecore1 HUB: adding interfaces to vlan 222")
+        ip_client.set_vlan_member_single(1, 1, if_ADVA, 222, 0) #XG interface OLT1
         ip_client.set_vlan_member_single(1, 1, if_SERVER, 222, 0) #server
-
-
 
 
 @orch.route('/step/<int:step>')
@@ -285,7 +283,10 @@ class _orchestration(Resource):
             provisioning3()
         if step == 4:
             provisioning4()
+        if step == 21:
+            deleter()
         return "OK", 200
+
 
 
 if __name__ == '__main__':
@@ -302,7 +303,7 @@ if __name__ == '__main__':
             ip_en = 1
             ip1 = config['ipowdm']['ip1']
             ip2 = config['ipowdm']['ip2']
-            test = config['ipowdm']['testing']
+            test = int(config['ipowdm']['testing'])
             ip_client = IPoWDM(ip1, ip2, test)
 
     """
@@ -316,7 +317,8 @@ if __name__ == '__main__':
             pon_en = 1
             pon_ip = config['pon']['ponIP']
             pon_port = config['pon']['ponPort']
-            test = config['pon']['testing']
+            test = int(config['pon']['testing'])
+            print(test)
             pon_client = PON(pon_ip, pon_port, test)
     """
     [matrix]
@@ -329,7 +331,7 @@ if __name__ == '__main__':
             matrix_en = 1
             m_ip = config['matrix']['matrixIP']
             m_port = config['matrix']['matrixPort']
-            test = config['matrix']['testing']
+            test = int(config['matrix']['testing'])
             matrix_client = TapiMatrix(m_ip, m_port, test)
     """
     [ipm]
@@ -346,6 +348,6 @@ if __name__ == '__main__':
             ipm_port = config['ipm']['ipm_Port']
             ipm_user = config['ipm']['ipm_user']
             ipm_pswd = config['ipm']['ipm_pswd']
-            test = config['ipm']['testing']
+            test = int(config['ipm']['testing'])
             ipm_client = IPM(ipm_ip, int(ipm_port), ipm_user, ipm_pswd, test)
     app.run(host='0.0.0.0', port=portx)
