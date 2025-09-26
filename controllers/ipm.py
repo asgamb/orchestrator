@@ -180,9 +180,12 @@ class IPM:
             data = json.loads(response)
             id_constellation = data[0]["href"].split("/")[-1]
             print(id_constellation)  # 👉 ABC12345
+            self.set_const_id(id_constellation)
+            return self.set_const_id(id_constellation)
         else:
             id_constellation = "0xxx1"
             self.set_const_id(id_constellation)
+            return self.set_const_id(id_constellation)
 
     def set_constrellation2(self):
         url = f"https://infinera-ipm.cselt.it/api/v1/xr-networks/{self.const_id}"

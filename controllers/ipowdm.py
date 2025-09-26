@@ -75,10 +75,10 @@ class IPoWDM:
                 r = requests.delete(url1, headers=self.headers)
                 r = requests.delete(url2, headers=self.headers)
 
-    def set_vlan_members(self, settings, interface, vlan_id):
+    def set_vlan_members(self, settings, interface, vlan_id, mode):
         #vlan_id, Interface
-        url1 = f"http://{self.ipowdms[1]}:3105/Sonic/vlan_member/{vlan_id}/{interface}/1"
-        url2 = f"http://{self.ipowdms[2]}:3105/Sonic/vlan_member/{vlan_id}/{interface}/1"
+        url1 = f"http://{self.ipowdms[1]}:3105/Sonic/vlan_member/{vlan_id}/{interface}/{mode}"
+        url2 = f"http://{self.ipowdms[2]}:3105/Sonic/vlan_member/{vlan_id}/{interface}/{mode}"
         print(url1)
         print(url2)
         if not self.test:
@@ -89,8 +89,8 @@ class IPoWDM:
                 r = requests.delete(url1, headers=self.headers)
                 r = requests.delete(url2, headers=self.headers)
 
-    def set_vlan_member_single(self, settings, idx, interface, vlan_id):
-        url1 = f"http://{self.ipowdms[idx]}:3105/Sonic/vlan_member/{vlan_id}/{interface}/1"
+    def set_vlan_member_single(self, settings, idx, interface, vlan_id, mode):
+        url1 = f"http://{self.ipowdms[idx]}:3105/Sonic/vlan_member/{vlan_id}/{interface}/{mode}"
         print(url1)
         if not self.test:
             if settings == 1:
@@ -111,6 +111,16 @@ class IPoWDM:
             else:
                 r = requests.delete(url1, headers=self.headers)
                 r = requests.delete(url2, headers=self.headers)
+
+    def set_vlan_single(self, settings, idx, vlan_id):
+        #vlan_id
+        url1 = f"http://{self.ipowdms[idx]}:3105/Sonic/vlan/{vlan_id}"
+        print(url1)
+        if not self.test:
+            if settings == 1:
+                r = requests.put(url1, headers=self.headers)
+            else:
+                r = requests.delete(url1, headers=self.headers)
 
     def check_reach(self, idx, ip_addr):
         url1 = f"http://{self.ipowdms[idx]}:3105/Sonic/reach/{ip_addr}"
